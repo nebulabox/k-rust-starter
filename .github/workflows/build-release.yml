@@ -19,8 +19,8 @@ jobs:
           ##### ==>>> tie 1
           - aarch64-unknown-linux-gnu
           - x86_64-unknown-linux-gnu
-          - x86_64-pc-windows-gnu
           - i686-unknown-linux-gnu
+          - x86_64-pc-windows-gnu
           - i686-pc-windows-gnu
           ###### ==>>> popular
           - aarch64-unknown-linux-musl
@@ -96,9 +96,16 @@ jobs:
           pwd
           cross build --release --target ${{matrix.target}}
           echo "==>>> Build finished"
+          echo "==>>> List release folder"
+          ls -al
           echo "==>>> tar xz file"
           pushd target/${{matrix.target}}/release/
-          tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}
+          if [[ "${{matrix.target}}" == "x86_64-pc-windows-gnu" || "${{matrix.target}}" == "i686-pc-windows-gnu" ]] 
+          then
+            tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}.exe
+          else
+            tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}
+          fi
           echo "==>>> List release folder"
           ls -al
           popd
