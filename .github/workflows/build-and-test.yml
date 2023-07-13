@@ -13,7 +13,7 @@ env:
   RUST_LOG: "trace"
 
 jobs:
-  buid_and_test:
+  buid-and-test:
     strategy:
       matrix:
         platform:
