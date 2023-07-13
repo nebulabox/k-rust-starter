@@ -14,7 +14,7 @@ jobs:
       RUST_BACKTRACE: full
     strategy:
       matrix:
-        target: // rustc --print target-list
+        target: # rustc --print target-list
           - x86_64-unknown-linux-musl
           - aarch64-unknown-linux-musl
 
