@@ -28,12 +28,43 @@ jobs:
           - mipsel-unknown-linux-musl
           - arm-unknown-linux-gnueabi
           ##### ==>>> others
-          # - aarch64-linux-android
           - x86_64-unknown-netbsd
           - x86_64-unknown-illumos
           - x86_64-unknown-freebsd
-          - x86_64-unknown-dragonfly
-          - x86_64-sun-solaris
+          - mipsel-unknown-linux-gnu
+          - mips-unknown-linux-musl
+          - mips-unknown-linux-gnu
+          - i686-unknown-linux-musl
+          - armv7-unknown-linux-gnueabi
+          - armv7-unknown-linux-musleabi
+          - arm-unknown-linux-musleabi
+          ##### ==>>> ignore
+          # - armv7-unknown-linux-musleabihf
+          # - arm-unknown-linux-musleabihf
+          # - armv7-unknown-linux-gnueabihf
+          # - arm-unknown-linux-gnueabihf
+          # - mips64el-unknown-linux-muslabi64
+          # - mips64el-unknown-linux-gnuabi64
+          # - mips64-unknown-linux-muslabi64
+          # - mips64-unknown-linux-gnuabi64
+          # - sparc64-unknown-linux-gnu
+          # - s390x-unknown-linux-gnu
+          # - riscv64gc-unknown-linux-gnu
+          # - powerpc64le-unknown-linux-gnu
+          # - powerpc64-unknown-linux-gnu
+          # - powerpc-unknown-linux-gnu
+          # - x86_64-sun-solaris
+          # - sparcv9-sun-solaris
+          # - aarch64-linux-android
+          # - x86_64-unknown-dragonfly
+          # - i686-unknown-freebsd
+          # - i686-linux-android
+          # - i586-unknown-linux-musl
+          # - i586-unknown-linux-gnu
+          # - armv7-linux-androideabi
+          # - armv5te-unknown-linux-musleabi
+          # - armv5te-unknown-linux-gnueabi
+          # - arm-linux-androideabi
           # - x86_64-linux-android
           # - wasm32-unknown-emscripten
           # - thumbv8m.main-none-eabihf
@@ -45,36 +76,6 @@ jobs:
           # - thumbv7em-none-eabihf
           # - thumbv7em-none-eabi
           # - thumbv6m-none-eabi
-          - sparcv9-sun-solaris
-          - sparc64-unknown-linux-gnu
-          - s390x-unknown-linux-gnu
-          - riscv64gc-unknown-linux-gnu
-          - powerpc64le-unknown-linux-gnu
-          - powerpc64-unknown-linux-gnu
-          - powerpc-unknown-linux-gnu
-          - mipsel-unknown-linux-gnu
-          - mips64el-unknown-linux-muslabi64
-          - mips64el-unknown-linux-gnuabi64
-          - mips64-unknown-linux-muslabi64
-          - mips64-unknown-linux-gnuabi64
-          - mips-unknown-linux-musl
-          - mips-unknown-linux-gnu
-          - i686-unknown-linux-musl
-          # - i686-unknown-freebsd
-          # - i686-linux-android
-          # - i586-unknown-linux-musl
-          # - i586-unknown-linux-gnu
-          - armv7-unknown-linux-musleabihf
-          - armv7-unknown-linux-gnueabihf
-          - armv7-unknown-linux-gnueabi
-          - armv7-unknown-linux-musleabi
-          # - armv7-linux-androideabi
-          # - armv5te-unknown-linux-musleabi
-          # - armv5te-unknown-linux-gnueabi
-          - arm-unknown-linux-musleabihf
-          - arm-unknown-linux-musleabi
-          - arm-unknown-linux-gnueabihf
-          # - arm-linux-androideabi
 
     steps:
       - uses: actions/checkout@v3
