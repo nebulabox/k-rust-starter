@@ -46,7 +46,7 @@ jobs:
           ls -al
           popd
 
-      - name: Github Release 
+      - name: Github Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,7 +65,7 @@ jobs:
           - aarch64-apple-darwin
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install Rust
         run: |
           rustup set profile minimal
@@ -87,7 +87,7 @@ jobs:
           ls -al
           popd
 
-      - name: Github Release 
+      - name: Github Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,11 +114,12 @@ jobs:
           rustup toolchain install stable
           rustup default stable
           rustup override set stable
-      
+
       - name: Add Bash Path
-          run: |
-            echo ::add-path::C:\msys64\usr\bin
-            dir C:\msys64\usr\bin
+        shell: cmd
+        run: |
+          echo ::add-path::C:\msys64\usr\bin
+          dir C:\msys64\usr\bin
 
       - name: Build
         shell: bash
@@ -133,14 +134,10 @@ jobs:
           ls -al
           popd
 
-      - name: Github Release 
+      - name: Github Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: target/${{matrix.target}}/release/${{matrix.target}}.tar.xz
           prerelease: ${{ contains(github.ref, '-') }}
-
-
-
-
