@@ -115,23 +115,15 @@ jobs:
           rustup default stable
           rustup override set stable
 
-      - name: Add Bash Path
+      - name: Build
         shell: cmd
         run: |
-          echo ::add-path::C:\msys64\usr\bin
-          dir C:\msys64\usr\bin
-
-      - name: Build
-        shell: bash
-        run: |
-          pwd
+          cd 
           cargo build --release --target ${{matrix.target}}
-          echo "==>>> Build finished"
-          echo "==>>> tar xz file"
-          pushd target/${{matrix.target}}/release/
-          tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}
+          pushd target\${{matrix.target}}\release\
+          ren ${{env.BIN_NAME}}.exe ${{matrix.target}}.${{env.BIN_NAME}}.exe
           echo "==>>> List release folder"
-          ls -al
+          dir
           popd
 
       - name: Github Release
@@ -139,5 +131,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: target/${{matrix.target}}/release/${{matrix.target}}.tar.xz
+          files: target/${{matrix.target}}/release/${{matrix.target}}.${{env.BIN_NAME}}.exe
           prerelease: ${{ contains(github.ref, '-') }}
+
