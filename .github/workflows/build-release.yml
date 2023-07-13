@@ -9,91 +9,91 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    env:
-      RUST_BACKTRACE: full
-    strategy:
-      matrix:
-        target: # rustc --print target-list
-          - x86_64-unknown-linux-musl
-          - aarch64-unknown-linux-musl
+  # build-linux:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     RUST_BACKTRACE: full
+  #   strategy:
+  #     matrix:
+  #       target: # rustc --print target-list
+  #         - x86_64-unknown-linux-musl
+  #         - aarch64-unknown-linux-musl
 
-    steps:
-      - uses: actions/checkout@v3
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Install Rust
-        run: |
-          rustup set profile minimal
-          rustup toolchain install stable
-          rustup default stable
-          rustup override set stable
-          rustup target add --toolchain stable ${{matrix.target}}
+  #     - name: Install Rust
+  #       run: |
+  #         rustup set profile minimal
+  #         rustup toolchain install stable
+  #         rustup default stable
+  #         rustup override set stable
+  #         rustup target add --toolchain stable ${{matrix.target}}
 
-      - name: Install cross
-        run: cargo install cross
+  #     - name: Install cross
+  #       run: cargo install cross
 
-      - name: Build ${{ matrix.target }}
-        timeout-minutes: 60
-        run: |
-          pwd
-          cross build --release --target ${{matrix.target}}
-          echo "==>>> Build finished"
-          echo "==>>> tar xz file"
-          pushd target/${{matrix.target}}/release/
-          tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}
-          echo "==>>> List release folder"
-          ls -al
-          popd
+  #     - name: Build ${{ matrix.target }}
+  #       timeout-minutes: 60
+  #       run: |
+  #         pwd
+  #         cross build --release --target ${{matrix.target}}
+  #         echo "==>>> Build finished"
+  #         echo "==>>> tar xz file"
+  #         pushd target/${{matrix.target}}/release/
+  #         tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}
+  #         echo "==>>> List release folder"
+  #         ls -al
+  #         popd
 
-      - name: Github Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: target/${{matrix.target}}/release/${{matrix.target}}.tar.xz
-          prerelease: ${{ contains(github.ref, '-') }}
+  #     - name: Github Release
+  #       uses: softprops/action-gh-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         files: target/${{matrix.target}}/release/${{matrix.target}}.tar.xz
+  #         prerelease: ${{ contains(github.ref, '-') }}
 
-  build-macos:
-    runs-on: macos-latest
-    env:
-      RUST_BACKTRACE: full
-    strategy:
-      matrix:
-        target:
-          - x86_64-apple-darwin
-          - aarch64-apple-darwin
-    steps:
-      - uses: actions/checkout@v3
+  # build-macos:
+  #   runs-on: macos-latest
+  #   env:
+  #     RUST_BACKTRACE: full
+  #   strategy:
+  #     matrix:
+  #       target:
+  #         - x86_64-apple-darwin
+  #         - aarch64-apple-darwin
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Install Rust
-        run: |
-          rustup set profile minimal
-          rustup toolchain install stable
-          rustup default stable
-          rustup override set stable
-          rustup target add --toolchain stable ${{ matrix.target }}
+  #     - name: Install Rust
+  #       run: |
+  #         rustup set profile minimal
+  #         rustup toolchain install stable
+  #         rustup default stable
+  #         rustup override set stable
+  #         rustup target add --toolchain stable ${{ matrix.target }}
 
-      - name: Build
-        shell: bash
-        run: |
-          pwd
-          cargo build --release --target ${{matrix.target}}
-          echo "==>>> Build finished"
-          echo "==>>> tar xz file"
-          pushd target/${{matrix.target}}/release/
-          tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}
-          echo "==>>> List release folder"
-          ls -al
-          popd
+  #     - name: Build
+  #       shell: bash
+  #       run: |
+  #         pwd
+  #         cargo build --release --target ${{matrix.target}}
+  #         echo "==>>> Build finished"
+  #         echo "==>>> tar xz file"
+  #         pushd target/${{matrix.target}}/release/
+  #         tar cvfJ ${{matrix.target}}.tar.xz ${{env.BIN_NAME}}
+  #         echo "==>>> List release folder"
+  #         ls -al
+  #         popd
 
-      - name: Github Release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: target/${{matrix.target}}/release/${{matrix.target}}.tar.xz
-          prerelease: ${{ contains(github.ref, '-') }}
+  #     - name: Github Release
+  #       uses: softprops/action-gh-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         files: target/${{matrix.target}}/release/${{matrix.target}}.tar.xz
+  #         prerelease: ${{ contains(github.ref, '-') }}
 
   build-windows:
     runs-on: windows-latest
@@ -103,7 +103,7 @@ jobs:
     strategy:
       matrix:
         target:
-          - x86_64-pc-windows-msvc
+          #- x86_64-pc-windows-msvc
           - aarch64-pc-windows-msvc
     steps:
       - uses: actions/checkout@v3
@@ -114,6 +114,7 @@ jobs:
           rustup toolchain install stable
           rustup default stable
           rustup override set stable
+          rustup target add --toolchain stable ${{matrix.target}}
 
       - name: Build
         shell: cmd
