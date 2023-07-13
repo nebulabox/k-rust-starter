@@ -16,7 +16,7 @@ jobs:
       matrix:
         target: # rustc --print target-list
           - x86_64-unknown-linux-musl
-          - aarch64-unknown-linux-musl
+          # - aarch64-unknown-linux-musl
 
     steps:
       - uses: actions/checkout@v3
@@ -36,8 +36,12 @@ jobs:
         timeout-minutes: 60
         run: |
           cross build --release --target ${{ matrix.target }}
+          echo "[Info] Build finished"
           mkdir -p release
+          echo "[Info] Copy file to release folder"
           cp target/${{ matrix.target }}/release/hellorust release/${{ matrix.target }}-hellorust
+          echo "[Info] List release folder"
+          ls release
 
       - name: Github Release 
         uses: softprops/action-gh-release@v1
