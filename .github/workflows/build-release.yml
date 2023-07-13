@@ -116,7 +116,6 @@ jobs:
           rustup override set stable
       
       - name: Add Bash Path
-          shell: cmd
           run: |
             echo ::add-path::C:\msys64\usr\bin
             dir C:\msys64\usr\bin
@@ -141,7 +140,7 @@ jobs:
         with:
           files: target/${{matrix.target}}/release/${{matrix.target}}.tar.xz
           prerelease: ${{ contains(github.ref, '-') }}
-          
-                
+
+
 
 
