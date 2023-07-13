@@ -5,6 +5,7 @@ on:
       - v*
 
 env:
+  BIN_NAME: "hellorust"
   CARGO_TERM_COLOR: always
 
 jobs:
@@ -27,7 +28,7 @@ jobs:
           rustup toolchain install stable
           rustup default stable
           rustup override set stable
-          rustup target add --toolchain stable ${{ matrix.target }}
+          rustup target add --toolchain stable ${{matrix.target}}
 
       - name: Install cross
         run: cargo install cross
@@ -35,20 +36,23 @@ jobs:
       - name: Build ${{ matrix.target }}
         timeout-minutes: 60
         run: |
-          cross build --release --target ${{ matrix.target }}
+          cross build --release --target ${{matrix.target}}
           echo "[Info] Build finished"
           mkdir -p release
           echo "[Info] Copy file to release folder"
-          cp target/${{ matrix.target }}/release/hellorust release/${{ matrix.target }}-hellorust
+          cp target/${{matrix.target}}/release/${{BIN_NAME}} release/${{matrix.target}}-${{BIN_NAME}}
+          chmod +x release/${{matrix.target}}-${{BIN_NAME}}
           echo "[Info] List release folder"
           ls release
+          echo "[Info] tar xz"
+          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{BIN_NAME}}
 
       - name: Github Release 
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: release/${{ matrix.target }}-hellorust
+          files: release/${{matrix.target}}.tar.xz
           prerelease: ${{ contains(github.ref, '-') }}
 
   build-macos:
@@ -74,19 +78,22 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          cargo build --release --target ${{ matrix.target }}
+          cross build --release --target ${{matrix.target}}
           echo "[Info] Build finished"
           mkdir -p release
           echo "[Info] Copy file to release folder"
-          cp target/${{ matrix.target }}/release/hellorust release/${{ matrix.target }}-hellorust
+          cp target/${{matrix.target}}/release/${{BIN_NAME}} release/${{matrix.target}}-${{BIN_NAME}}
+          chmod +x release/${{matrix.target}}-${{BIN_NAME}}
           echo "[Info] List release folder"
           ls release
+          echo "[Info] tar xz"
+          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{BIN_NAME}}
 
-      - name: Upload Github Assets
+      - name: Github Release 
         uses: softprops/action-gh-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
-          files: build/release/*
-          prerelease: ${{ contains(github.ref, '-') }}
+          files: release/${{matrix.target}}.tar.xz
+          prerelease: ${{contains(github.ref, '-')}}
 
