@@ -31,7 +31,7 @@ jobs:
           rustup toolchain install stable
           rustup default stable
           rustup override set stable
-      - name: Build (Linux macOS)
+      - name: Build (Linux or macOS)
         if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         run: cargo build --verbose
       - name: Build (Windows)
