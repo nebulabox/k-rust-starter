@@ -1,0 +1,42 @@
+// https://docs.github.com/en/actions/quickstart
+// https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+name: Build And Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_LOG: "trace"
+
+jobs:
+  buid_and_test:
+    strategy:
+      matrix:
+        platform:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Rust
+        run: |
+          rustup set profile minimal
+          rustup toolchain install stable
+          rustup default stable
+          rustup override set stable
+      - name: Build (Linux macOS)
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+        run: cargo build --verbose
+      - name: Build (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        run: cargo build --verbose
+      - name: Run Test
+        run: cargo test --verbose --no-fail-fast
+
