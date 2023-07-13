@@ -5,7 +5,7 @@ on:
       - v*
 
 env:
-  env.BIN_NAME: "hellorust"
+  BIN_NAME: "hellorust"
   CARGO_TERM_COLOR: always
 
 jobs:
@@ -37,15 +37,12 @@ jobs:
         timeout-minutes: 60
         run: |
           cross build --release --target ${{matrix.target}}
-          echo "[Info] Build finished"
+          echo "==>>> Build finished"
+          echo "==>>> tar xz file to release folder"
           mkdir -p release
-          echo "[Info] Copy file to release folder"
-          cp target/${{matrix.target}}/release/${{env.BIN_NAME}} release/${{matrix.target}}-${{env.BIN_NAME}}
-          chmod +x release/${{matrix.target}}-${{env.BIN_NAME}}
-          echo "[Info] List release folder"
-          ls release
-          echo "[Info] tar xz"
-          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{env.BIN_NAME}}
+          tar cvfJ release/${{matrix.target}}.tar.xz target/${{matrix.target}}/release/${{env.BIN_NAME}} 
+          echo "==>>> List release folder"
+          ls -al release
 
       - name: Github Release 
         uses: softprops/action-gh-release@v1
@@ -79,15 +76,12 @@ jobs:
         shell: bash
         run: |
           cargo build --release --target ${{matrix.target}}
-          echo "[Info] Build finished"
+          echo "==>>> Build finished"
+          echo "==>>> tar xz file to release folder"
           mkdir -p release
-          echo "[Info] Copy file to release folder"
-          cp target/${{matrix.target}}/release/${{env.BIN_NAME}} release/${{matrix.target}}-${{env.BIN_NAME}}
-          chmod +x release/${{matrix.target}}-${{env.BIN_NAME}}
-          echo "[Info] List release folder"
-          ls release
-          echo "[Info] tar xz"
-          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{env.BIN_NAME}}
+          tar cvfJ release/${{matrix.target}}.tar.xz target/${{matrix.target}}/release/${{env.BIN_NAME}} 
+          echo "==>>> List release folder"
+          ls -al release
 
       - name: Github Release 
         uses: softprops/action-gh-release@v1
@@ -102,6 +96,11 @@ jobs:
     env:
       RUSTFLAGS: "-C target-feature=+crt-static"
       RUST_BACKTRACE: full
+    strategy:
+      matrix:
+        target:
+          - x86_64-pc-windows-msvc
+          # - aarch64-pc-windows-msvc
     steps:
       - uses: actions/checkout@v3
 
