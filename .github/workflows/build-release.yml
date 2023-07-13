@@ -5,7 +5,7 @@ on:
       - v*
 
 env:
-  BIN_NAME: "hellorust"
+  env.BIN_NAME: "hellorust"
   CARGO_TERM_COLOR: always
 
 jobs:
@@ -40,12 +40,12 @@ jobs:
           echo "[Info] Build finished"
           mkdir -p release
           echo "[Info] Copy file to release folder"
-          cp target/${{matrix.target}}/release/${{BIN_NAME}} release/${{matrix.target}}-${{BIN_NAME}}
-          chmod +x release/${{matrix.target}}-${{BIN_NAME}}
+          cp target/${{matrix.target}}/release/${{env.BIN_NAME}} release/${{matrix.target}}-${{env.BIN_NAME}}
+          chmod +x release/${{matrix.target}}-${{env.BIN_NAME}}
           echo "[Info] List release folder"
           ls release
           echo "[Info] tar xz"
-          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{BIN_NAME}}
+          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{env.BIN_NAME}}
 
       - name: Github Release 
         uses: softprops/action-gh-release@v1
@@ -78,16 +78,16 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          cross build --release --target ${{matrix.target}}
+          cargo build --release --target ${{matrix.target}}
           echo "[Info] Build finished"
           mkdir -p release
           echo "[Info] Copy file to release folder"
-          cp target/${{matrix.target}}/release/${{BIN_NAME}} release/${{matrix.target}}-${{BIN_NAME}}
-          chmod +x release/${{matrix.target}}-${{BIN_NAME}}
+          cp target/${{matrix.target}}/release/${{env.BIN_NAME}} release/${{matrix.target}}-${{env.BIN_NAME}}
+          chmod +x release/${{matrix.target}}-${{env.BIN_NAME}}
           echo "[Info] List release folder"
           ls release
           echo "[Info] tar xz"
-          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{BIN_NAME}}
+          tar cvfJ release/${{matrix.target}}.tar.xz release/${{matrix.target}}-${{env.BIN_NAME}}
 
       - name: Github Release 
         uses: softprops/action-gh-release@v1
@@ -97,3 +97,22 @@ jobs:
           files: release/${{matrix.target}}.tar.xz
           prerelease: ${{contains(github.ref, '-')}}
 
+  build-windows:
+    runs-on: windows-latest
+    env:
+      RUSTFLAGS: "-C target-feature=+crt-static"
+      RUST_BACKTRACE: full
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Rust
+        run: |
+          rustup set profile minimal
+          rustup toolchain install stable
+          rustup default stable
+          rustup override set stable
+
+      - name: Build
+        run: |
+          cargo build --release --target ${{matrix.target}}
+          dir target/${{matrix.target}}/release/
