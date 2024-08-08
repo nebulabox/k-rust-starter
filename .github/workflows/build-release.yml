@@ -10,6 +10,7 @@ env:
 
 jobs:
   build-linux:
+    permissions: write-all
     runs-on: ubuntu-latest
     env:
       RUST_BACKTRACE: full
@@ -120,6 +121,7 @@ jobs:
           prerelease: ${{ contains(github.ref, '-') }}
 
   build-macos:
+    permissions: write-all
     runs-on: macos-latest
     env:
       RUST_BACKTRACE: full
@@ -161,6 +163,7 @@ jobs:
           prerelease: ${{ contains(github.ref, '-') }}
 
   build-windows:
+    permissions: write-all
     runs-on: windows-latest
     env:
       RUSTFLAGS: "-C target-feature=+crt-static"
